@@ -10,7 +10,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "usermgmnt.vercel.app",
       "https://usermgmnt-git-main-iamikrama-projects.vercel.app",
+      /\.vercel\.app$/
     ],
     credentials: true,
   })
