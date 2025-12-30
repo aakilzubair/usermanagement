@@ -16,12 +16,12 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      {/* LEFT */}
+      {/* LEFT: LOGO */}
       <div className="nav-left">
         <span className="logo">UserMgmt</span>
       </div>
 
-      {/* CENTER LINKS */}
+      {/* CENTER: LINKS */}
       <nav className="nav-center">
         {user.role === "admin" && (
           <>
@@ -46,27 +46,30 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* DESKTOP RIGHT */}
-      <div className="nav-right desktop-only">
-        <div className="user-info">
+      {/* RIGHT SIDE */}
+      <div className="nav-right">
+        {/* DESKTOP USER INFO */}
+        <div className="desktop-only user-info">
           <span className="user-name">{user.fullName}</span>
           <span className="user-role">{user.role}</span>
         </div>
 
-        <button className="logout-btn" onClick={handleLogout}>
+        <button
+          className="logout-btn desktop-only"
+          onClick={handleLogout}
+        >
           Logout
         </button>
-      </div>
 
-      {/* MOBILE HAMBURGER */}
-      <div className="mobile-only">
+        {/* MOBILE HAMBURGER */}
         <button
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
+          className="hamburger mobile-only"
+          onClick={() => setMenuOpen((prev) => !prev)}
         >
           ☰
         </button>
 
+        {/* MOBILE DROPDOWN */}
         {menuOpen && (
           <div className="mobile-menu">
             <div className="mobile-user">
