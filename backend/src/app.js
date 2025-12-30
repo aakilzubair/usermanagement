@@ -8,7 +8,7 @@ const app = express();
 ========================= */
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://usermgmnt.vercel.app/login", // ⬅️ replace after Vercel deploy
+  "https://usermgmnt-git-main-iamikrama-projects.vercel.app", // ⬅️ replace after Vercel deploy
 ];
 
 app.use(
