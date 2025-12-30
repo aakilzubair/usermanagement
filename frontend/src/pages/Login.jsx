@@ -16,16 +16,26 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await api.post("/auth/login", { email, password });
+      // 🔐 Call backend login API
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-      login(res.data);
+      // ✅ FIX: pass token & user separately
+      const { token, user } = res.data;
 
-      if (res.data.user.role === "admin") {
+      // Store auth in context
+      login(token, user);
+
+      // Redirect based on role
+      if (user.role === "admin") {
         navigate("/dashboard");
       } else {
         navigate("/profile");
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError(err.response?.data?.message || "Login failed");
     }
   };
@@ -41,6 +51,7 @@ export default function Login() {
           <input
             type="email"
             placeholder="Email"
+            value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -48,6 +59,7 @@ export default function Login() {
           <input
             type="password"
             placeholder="Password"
+            value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
           />
