@@ -7,31 +7,36 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user on refresh
+  // 🔁 Restore login on refresh
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (token) {
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      api
-        .get("/auth/me")
-        .then((res) => {
-          setUser(res.data.user);
-        })
-        .catch(() => {
-          logout();
-        })
-        .finally(() => setLoading(false));
-    } else {
+    if (!token) {
       setLoading(false);
+      return;
     }
+
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    api
+      .get("/auth/me")
+      .then((res) => {
+        setUser(res.data.user);
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        setUser(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  const login = (data) => {
-    localStorage.setItem("token", data.token);
-    api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-    setUser(data.user);
+  // ✅ Correct login (expects ONE object)
+  const login = ({ token, user }) => {
+    localStorage.setItem("token", token);
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setUser(user);
   };
 
   const logout = () => {

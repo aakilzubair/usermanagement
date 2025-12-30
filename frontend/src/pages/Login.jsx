@@ -16,26 +16,23 @@ export default function Login() {
     setError("");
 
     try {
-      // 🔐 Call backend login API
       const res = await api.post("/auth/login", {
         email,
         password,
       });
 
-      // ✅ FIX: pass token & user separately
       const { token, user } = res.data;
 
-      // Store auth in context
-      login(token, user);
+      // ✅ FIXED: correct data shape
+      login({ token, user });
 
-      // Redirect based on role
+      // 🔀 Role-based redirect
       if (user.role === "admin") {
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       } else {
-        navigate("/profile");
+        navigate("/profile", { replace: true });
       }
     } catch (err) {
-      console.error("Login error:", err);
       setError(err.response?.data?.message || "Login failed");
     }
   };
