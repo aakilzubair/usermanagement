@@ -21,8 +21,8 @@ export default function Navbar() {
         <span className="logo">UserMgmt</span>
       </div>
 
-      {/* CENTER: LINKS */}
-      <nav className="nav-center">
+      {/* CENTER: DESKTOP LINKS */}
+      <nav className="nav-center desktop-only">
         {user.role === "admin" && (
           <>
             <NavLink to="/dashboard" className="nav-link">
@@ -48,7 +48,7 @@ export default function Navbar() {
 
       {/* RIGHT SIDE */}
       <div className="nav-right">
-        {/* DESKTOP USER INFO */}
+        {/* DESKTOP USER INFO & LOGOUT */}
         <div className="desktop-only user-info">
           <span className="user-name">{user.fullName}</span>
           <span className="user-role">{user.role}</span>
@@ -65,27 +65,72 @@ export default function Navbar() {
         <button
           className="hamburger mobile-only"
           onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label="Toggle menu"
         >
           ☰
         </button>
-
-        {/* MOBILE DROPDOWN */}
-        {menuOpen && (
-          <div className="mobile-menu">
-            <div className="mobile-user">
-              <strong>{user.fullName}</strong>
-              <span>{user.role}</span>
-            </div>
-
-            <button
-              className="logout-btn full"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* MOBILE DROPDOWN MENU */}
+      {menuOpen && (
+        <div className="mobile-menu">
+          {/* Mobile Navigation Links */}
+          <nav className="mobile-nav-links">
+            {user.role === "admin" && (
+              <>
+                <NavLink 
+                  to="/dashboard" 
+                  className="mobile-nav-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Dashboard
+                </NavLink>
+                <NavLink 
+                  to="/admin/users" 
+                  className="mobile-nav-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Users
+                </NavLink>
+              </>
+            )}
+
+            {user.role === "user" && (
+              <>
+                <NavLink 
+                  to="/profile" 
+                  end 
+                  className="mobile-nav-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Profile
+                </NavLink>
+                <NavLink 
+                  to="/profile/edit" 
+                  className="mobile-nav-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Edit
+                </NavLink>
+              </>
+            )}
+          </nav>
+
+          {/* Mobile User Info */}
+          <div className="mobile-user">
+            <strong>{user.fullName}</strong>
+            <span>{user.role}</span>
+          </div>
+
+          {/* Mobile Logout */}
+          <button
+            className="logout-btn full"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
+      )}
     </header>
   );
 }
