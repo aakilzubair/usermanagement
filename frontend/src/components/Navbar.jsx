@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   if (!user) return null;
 
@@ -19,7 +21,7 @@ export default function Navbar() {
         <span className="logo">UserMgmt</span>
       </div>
 
-      {/* CENTER */}
+      {/* CENTER LINKS */}
       <nav className="nav-center">
         {user.role === "admin" && (
           <>
@@ -37,7 +39,6 @@ export default function Navbar() {
             <NavLink to="/profile" end className="nav-link">
               Profile
             </NavLink>
-
             <NavLink to="/profile/edit" className="nav-link">
               Edit
             </NavLink>
@@ -45,8 +46,8 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* RIGHT */}
-      <div className="nav-right">
+      {/* DESKTOP RIGHT */}
+      <div className="nav-right desktop-only">
         <div className="user-info">
           <span className="user-name">{user.fullName}</span>
           <span className="user-role">{user.role}</span>
@@ -55,6 +56,32 @@ export default function Navbar() {
         <button className="logout-btn" onClick={handleLogout}>
           Logout
         </button>
+      </div>
+
+      {/* MOBILE HAMBURGER */}
+      <div className="mobile-only">
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        {menuOpen && (
+          <div className="mobile-menu">
+            <div className="mobile-user">
+              <strong>{user.fullName}</strong>
+              <span>{user.role}</span>
+            </div>
+
+            <button
+              className="logout-btn full"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );
