@@ -4,25 +4,14 @@ const cors = require("cors");
 const app = express();
 
 /* =========================
-   CORS CONFIG (IMPORTANT)
+   CORS CONFIG (FIXED)
 ========================= */
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://usermgmnt-git-main-iamikrama-projects.vercel.app", // ⬅️ replace after Vercel deploy
-];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (Postman, mobile apps)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("CORS not allowed"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "https://usermgmnt-git-main-iamikrama-projects.vercel.app",
+    ],
     credentials: true,
   })
 );
@@ -52,38 +41,20 @@ app.get("/", (req, res) => {
 });
 
 /* =========================
-   HEALTH CHECK (RENDER)
+   HEALTH CHECK
 ========================= */
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
 /* =========================
-   ROUTES (SAFE LOAD)
+   ROUTES
 ========================= */
-let authRoutes, adminRoutes;
+const authRoutes = require("./routes/auth.routes");
+const adminRoutes = require("./routes/admin.routes");
 
-try {
-  authRoutes = require("./routes/auth.routes");
-  console.log("✅ Auth routes loaded");
-} catch (err) {
-  console.error("❌ Error loading auth routes:", err.message);
-}
-
-try {
-  adminRoutes = require("./routes/admin.routes");
-  console.log("✅ Admin routes loaded");
-} catch (err) {
-  console.error("❌ Error loading admin routes:", err.message);
-}
-
-if (authRoutes) {
-  app.use("/api/auth", authRoutes);
-}
-
-if (adminRoutes) {
-  app.use("/api/admin", adminRoutes);
-}
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 /* =========================
    404 HANDLER
@@ -96,7 +67,7 @@ app.use((req, res) => {
 });
 
 /* =========================
-   GLOBAL ERROR HANDLER
+   ERROR HANDLER
 ========================= */
 app.use((err, req, res, next) => {
   console.error("❌ Error:", err.message);
