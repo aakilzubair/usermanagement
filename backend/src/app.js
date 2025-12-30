@@ -10,7 +10,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "usermanagement-jet.vercel.app",
+      "https://usermanagement-jet.vercel.app",
+      "https://usermanagement-git-main-aakils-projects-f553ab64.vercel.app",
       /\.vercel\.app$/
     ],
     credentials: true,
