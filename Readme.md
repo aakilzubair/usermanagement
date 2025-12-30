@@ -212,14 +212,4 @@ GitHub: https://github.com/aakilzubair
 This project was built as part of the Backend Developer Intern Assessment for Purple Merit Technologies.
 
 
----
-
-## ✅ How to add this README to GitHub (terminal)
-
-From **repo root**:
-
-```bash
-touch README.md
-nano README.md
-
-
+Thanks
